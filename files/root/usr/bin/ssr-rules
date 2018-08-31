@@ -8,7 +8,7 @@
 
 usage() {
 	cat <<-EOF
-		Usage: ss-rules [options]
+		Usage: ssr-rules [options]
 
 		Valid options are:
 

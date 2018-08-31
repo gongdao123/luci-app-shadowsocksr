@@ -99,7 +99,6 @@ for _, v in ipairs(protocols) do o:value(v, v:upper()) end
 o.rmempty = false
 
 o = s:option(Value, "protocol_param", translate("Protocol Param"))
-o.datatype = "uinteger"
 o.rmempty = true
 
 o = s:option(ListValue, "obfs", translate("Obfs"))
