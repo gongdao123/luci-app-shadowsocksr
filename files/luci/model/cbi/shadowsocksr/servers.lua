@@ -11,7 +11,7 @@ end
 m = Map(shadowsocksr, "%s - %s" %{translate("ShadowSocksR"), translate("Servers Manage")})
 
 -- Server Subscribe
-if nixio.fs.access("/usr/share/shadowsocksr/subscribe.sh") and has_bin("base64") and has_bin("curl") and has_bin("bash") and has_bin("dig") then
+if nixio.fs.access("/usr/share/shadowsocksr/subscribe.sh") and has_bin("base64") and has_bin("curl") and has_bin("bash") and has_bin("dig") and has_bin("ckipver") then
 	s = m:section(TypedSection, "server_subscribe", translate("Server subscription"))
 	s.anonymous = true
 
