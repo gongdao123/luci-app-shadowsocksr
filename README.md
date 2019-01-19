@@ -32,11 +32,13 @@ OpenWrt LuCI for ShadowsocksR-libev
 `coreutils-base64` | base64 解码 DNS 域名污染列表和服务器订阅数据
 `bash`             | 服务器订阅脚本使用 bash 解释器运行
 `bind-dig`         | 用于订阅脚本解析域名
+`ckipver`         | 用于订阅脚本检测 IP 地址合法性
 
 软件包不显式这些依赖，会根据用户安装的依赖启用相应的功能.
 
 DNS 防污染支持的软件包：`cdns`、`dns-forwarder`、`https_dns_proxy`、`pdnsd`，这些软件包可以在我的 GitHub 以及 opkg 软件源找到.
 
+注：[ckipver](https://github.com/Hill-98/openwrt-ckipver)
 
 编译
 ---
