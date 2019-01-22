@@ -46,7 +46,7 @@ Server_Update() { # 更新服务器数据
 # }
 
 check_server() { # 检查服务器
-    is_exist() {
+    is_exist() { # 当前服务器是否存在
         [ $server_exist -eq 1 ] && return 0
         local alias_t=$(uci -q get $name.$1.alias | grep "\[$2\]")
         [ -z "$alias_t" ] && return 1
@@ -84,7 +84,7 @@ check_server() { # 检查服务器
         subscribe_n=$(($subscribe_n + 1))
     fi
     Server_Update $server_uci_name "${ssr_remarks}_v$1" $ip
-    subscribe_x=${subscribe_x}"$ssr_host:$ssr_port"" "
+    subscribe_x=${subscribe_x}"$ip:$ssr_port"" "
     # echo "服务器地址: $ip"
     # echo "服务器端口 $ssr_port"
     # echo "密码: $ssr_passwd"
