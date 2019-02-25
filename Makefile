@@ -1,6 +1,6 @@
 #
 # Copyright (C) 2016-2017 Jian Chang <aa65535@live.com>
-# Copyright (C) 2018 XiaoShan mivm.cn
+# Copyright (C) 2019 XiaoShan mivm.cn
 #
 # This is free software, licensed under the GNU General Public License v3.
 # See /LICENSE for more information.
@@ -10,11 +10,11 @@ include $(TOPDIR)/rules.mk
 
 PKG_NAME:=luci-app-shadowsocksr
 PKG_VERSION:=1.9.0
-PKG_RELEASE:=1
+PKG_RELEASE:=xs-1
 
 PKG_LICENSE:=GPLv3
 PKG_LICENSE_FILES:=LICENSE
-PKG_MAINTAINER:=Jian Chang <aa65535@live.com>
+PKG_MAINTAINER:=Jian Chang <aa65535@live.com> & Xiao Shan <lufanzhong@gmail.com>
 
 PKG_BUILD_DIR:=$(BUILD_DIR)/$(PKG_NAME)
 

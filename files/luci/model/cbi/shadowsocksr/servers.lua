@@ -1,4 +1,5 @@
 -- Copyright (C) 2016-2017 Jian Chang <aa65535@live.com>
+-- Copyright (C) 2019 XiaoShan mivm.cn
 -- Licensed to the public under the GNU General Public License v3.
 
 local m, s, o
@@ -31,10 +32,27 @@ if nixio.fs.access("/usr/share/shadowsocksr/subscribe.sh") and has_bin("base64")
 	o = s:option(DynamicList, "subscribe_url", translate("Subscribe URL"))
 	o.rmempty = true
 
-	o = s:option(Button,"update",translate("Update"))
+	o = s:option(Button,"update", translate("Update"))
 	o.write = function()
-	luci.sys.call("/usr/share/shadowsocksr/subscribe.sh >/dev/null 2>&1")
-	luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
+		luci.sys.call("/usr/share/shadowsocksr/subscribe.sh >/dev/null 2>&1")
+		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
+	end
+end
+
+-- Add servers from URLs
+if nixio.fs.access("/usr/share/shadowsocksr/add_for_url.sh") and has_bin("base64") and has_bin("bash") and has_bin("dig") and has_bin("ckipver") then
+	s = m:section(TypedSection, "general", translate("Add servers from URLs"))
+	s.addremove = false
+	s.anonymous = true
+
+	o = s:option(Value, "server_url", "URL", translate("Support only ssr:://"))
+	o.rmempty = true
+	o.write = function(self, section, value)
+		luci.sys.call("/usr/share/shadowsocksr/add_for_url.sh %s >/dev/null 2>&1" %{value})
+	end
+	o = s:option(Button,"server_add", translate("Add"))
+	o.write = function()
+		luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "servers"))
 	end
 end
 

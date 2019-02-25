@@ -216,3 +216,9 @@ msgstr "GFW 列表模式"
 
 msgid "Domain Blacklist"
 msgstr "域名黑名单"
+
+msgid "Add servers from URLs"
+msgstr "从 URL 添加服务器"
+
+msgid "Support only ssr:://"
+msgstr "仅支持 ssr:://"
