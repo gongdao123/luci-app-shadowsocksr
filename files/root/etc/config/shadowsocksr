@@ -33,6 +33,3 @@ config access_control
 
 config server_subscribe
 	option auto_update '0'
-
-config dns_poisoning
-	option method 'nil'

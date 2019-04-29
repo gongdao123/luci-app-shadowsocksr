@@ -160,38 +160,4 @@ if has_tunnel then
 	o.rmempty = false
 end
 
-
-if nixio.fs.access("/usr/share/dnsmasq/trust-anchors.conf") then
-	s = m:section(TypedSection, "dns_poisoning", translate("DNS poisoning"))
-	s.anonymous = true
-	
-	o = s:option(ListValue, "method", translate("Processing method"))
-	o:value("nil", translate("Disable"))
-	if has_bin("cdns") then
-		o:value("cdns", "CDNS")
-	end
-	if has_bin("pdnsd") then
-		o:value("pdnsd", "Pdnsd (OpenDNS)")
-	end
-	if has_bin("dns-forwarder") then
-		o:value("dnsforwarder", "DNS Forwarder (TUNA DNS)")
-	end
-	if has_bin("https_dns_proxy") then
-		o:value("https_dns_proxy", "https_dns_proxy (Google DNS)")
-	end
-	o:value("unknown","127.0.0.1:5300")
-	o.default = "nil"
-	o.rmempty = false
-	
-	if nixio.fs.access("/usr/share/shadowsocksr/update.sh") and nixio.fs.access("/usr/share/shadowsocksr/gfwlist2dnsmasq.sh") and has_bin("base64") and has_bin("curl") then
-		o = s:option(Button,"update",translate("Update poisoning list"))
-		o.write = function()
-			luci.sys.call("/usr/share/shadowsocksr/update.sh >/dev/null 2>&1")
-			luci.http.redirect(luci.dispatcher.build_url("admin", "services", "shadowsocksr", "general"))
-		end
-	end
-end
-
-
-
 return m

@@ -192,51 +192,11 @@ get_dnsmasq_confdir() {
 	fi
 }
 
-dns_poisoning() {
-	local gfw_list=/etc/shadowsocksr/dnsmasq_gfwlist.conf
-	local gfw_list_tmp=$dnsmasq_confdir/dnsmasq_gfwlist.conf
-	local method=$(uci_get_by_type dns_poisoning method)
-	if [ $(uci_get_by_type dns_poisoning method) != "nil" ]; then
-		case "$method" in
-			cdns)
-				cdns -c /etc/cdns.json
-			;;
-			dnsforwarder)
-				uci set dns-forwarder.@dns-forwarder[0].enable=1
-				uci set dns-forwarder.@dns-forwarder[0].dns_servers=101.6.6.6
-				uci commit dns-forwarder
-				/etc/init.d/dns-forwarder start
-			;;
-			https_dns_proxy)
-				uci set https_dns_proxy.@https_dns_proxy[0].listen_port='5300'
-				uci commit https_dns_proxy
-				/etc/init.d/https_dns_proxy start
-			;;
-			pdnsd)
-				start_pdnsd
-			;;
-		esac
-		[ ! -f $gfw_list_tmp ] && {
-			ln -s $gfw_list $gfw_list_tmp
-			dnsmasq_restart=1
-		}
-	else
-		[ -f $gfw_list_tmp ] && {
-			rm $gfw_list_tmp
-			dnsmasq_restart=1
-		}
-	fi
-	ls /etc/rc.d/*dns-forwarder >/dev/null 2>&1
-	[ $? -eq 0 ] && /etc/init.d/dns-forwarder disable
-	ls /etc/rc.d/*https_dns_proxy >/dev/null 2>&1
-	[ $? -eq 0 ] && /etc/init.d/https_dns_proxy disable
-}
-
 corn() {
 	[ -n "$(grep -w "/usr/share/shadowsocksr/subscribe.sh" /etc/crontabs/root)" ] && sed -i '/\/usr\/share\/shadowsocksr\/subscribe.sh/d' /etc/crontabs/root
 	[ $(uci_get_by_type server_subscribe auto_update 0) -eq 1 ] && echo "0 $(uci_get_by_type server_subscribe auto_update_time) * * * /usr/share/shadowsocksr/subscribe.sh" >> /etc/crontabs/root
-	[ -z "$(grep -w "/usr/share/shadowsocksr/update.sh" /etc/crontabs/root)" ] && echo "0 0 * * 0 /usr/share/shadowsocksr/update.sh" >> /etc/crontabs/root
 }
+
 start() {
 	pidof ssr-redir ssr-local ssr-tunnel >/dev/null && return 0
 	dnsmasq_confdir=$(get_dnsmasq_confdir)
@@ -245,7 +205,6 @@ start() {
 	ssr_redir && rules
 	ssr_local
 	ssr_tunnel
-	dns_poisoning
 	corn
 	[ $dnsmasq_restart -eq 1 ] && /etc/init.d/dnsmasq restart >/dev/null 2>&1
 }
@@ -264,6 +223,4 @@ stop() {
 	/usr/bin/ssr-rules -f
 	kill_all ssr-redir ssr-local ssr-tunnel cdns pdnsd
 	rm  -rf /var/pdnsd
-	/etc/init.d/dns-forwarder stop >/dev/null 2>&1
-	/etc/init.d/https_dns_proxy stop >/dev/null 2>&1
 }
